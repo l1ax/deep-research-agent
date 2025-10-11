@@ -30,8 +30,7 @@ const clarifyAgent = async (state: typeof GlobalState.State) => {
         })
     } else {
         return new Command({
-            // TODO: goto research brief node
-            goto: END,
+            goto: 'researchBrief',
             update: {
                 messages: [new AIMessage(response.verification)]
             }

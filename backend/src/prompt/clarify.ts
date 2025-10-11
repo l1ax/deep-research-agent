@@ -3,7 +3,7 @@ import { BaseMessage } from "@langchain/core/messages";
 export const clarifyWithUserInstructions = (messages: BaseMessage[], date: string) => `
 These are the messages that have been exchanged so far from the user asking for the report:
 <Messages>
-${messages}
+${messages.map(message => message.content).join('\n')}
 </Messages>
 
 Today's date is ${date}.
