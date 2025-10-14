@@ -15,7 +15,9 @@ const ClarifyOutput = z.object({
 const clarifyAgent = async (state: typeof GlobalState.State) => {
     const messages: BaseMessage[] = state.messages;
 
-    const prompt = clarifyWithUserInstructions(messages, dayjs().format('YYYY-MM-DD'));
+    const messagesString = messages.map(message => message.content).join('\n');
+
+    const prompt = clarifyWithUserInstructions(messagesString, dayjs().format('YYYY-MM-DD'));
 
     const wrappedLlm = llm.withStructuredOutput(ClarifyOutput);
 
@@ -30,7 +32,7 @@ const clarifyAgent = async (state: typeof GlobalState.State) => {
         })
     } else {
         return new Command({
-            goto: 'researchBrief',
+            goto: 'researchBriefAgent',
             update: {
                 messages: [new AIMessage(response.verification)]
             }
@@ -38,4 +40,4 @@ const clarifyAgent = async (state: typeof GlobalState.State) => {
     }
 }
 
-export {clarifyAgent};
+export default clarifyAgent;

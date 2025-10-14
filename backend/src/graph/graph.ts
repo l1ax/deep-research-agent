@@ -1,11 +1,12 @@
 import {END, START, StateGraph} from '@langchain/langgraph';
 import {GlobalState} from '../state/globalState';
-import {clarifyAgent, researchBriefAgent} from '../node';
+import {clarifyAgent, researchBriefAgent, supervisorAgent} from '../node';
 
 const workflow = new StateGraph(GlobalState)
-.addNode('clarify', clarifyAgent, {ends: ['researchBrief', END]})
-.addNode('researchBrief', researchBriefAgent, {ends: [END]})
-.addEdge(START, 'clarify');
+.addNode('clarifyAgent', clarifyAgent, {ends: ['researchBriefAgent', END]})
+.addNode('researchBriefAgent', researchBriefAgent, {ends: ['supervisorAgent']})
+.addNode('supervisorAgent', supervisorAgent, {ends: [END]})
+.addEdge(START, 'clarifyAgent');
 
 const app = workflow.compile();
 

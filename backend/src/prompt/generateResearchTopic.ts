@@ -1,13 +1,11 @@
-import {BaseMessage} from '@langchain/core/messages'
-
-export const generateResearchTopic = (messages: BaseMessage[], date: string) => {
+export const generateResearchTopic = (messages: string, date: string) => {
     return `
 You will be given a set of messages that have been exchanged so far between yourself and the user. 
 Your job is to translate these messages into a more detailed and concrete research question that will be used to guide the research.
 
 The messages that have been exchanged so far between yourself and the user are:
 <Messages>
-${messages.map(message => message.content).join('\n')}
+${messages}
 </Messages>
 
 Today's date is ${date}.
