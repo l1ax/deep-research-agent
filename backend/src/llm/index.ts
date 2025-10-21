@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const llm = new ChatDeepSeek({
-    model: 'deepseek-v3-250324',
+    model: 'deepseek-v3-1-terminus',
     apiKey: process.env.API_KEY,
     streaming: true,
     configuration: {

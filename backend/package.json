@@ -15,12 +15,13 @@
     "@langchain/deepseek": "^0.1.0",
     "@langchain/langgraph": "^0.4.9",
     "@langchain/langgraph-checkpoint": "^0.1.1",
+    "@langchain/langgraph-cli": "0.0.65",
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.3",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "zod": "3"
+    "zod": "3.25.67"
   }
 }
