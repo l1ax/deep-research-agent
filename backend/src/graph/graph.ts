@@ -1,14 +1,14 @@
 import {END, START, StateGraph} from '@langchain/langgraph';
-import {GlobalState} from '../state/globalState';
-import {clarifyAgent, researchBriefAgent, supervisorAgent} from '../node';
+import {globalState} from '../state/globalState';
+import {generateQuery, reflection, webSearch} from '../nodes';
 
-const workflow = new StateGraph(GlobalState)
-.addNode('clarifyAgent', clarifyAgent, {ends: ['researchBriefAgent', END]})
-.addNode('researchBriefAgent', researchBriefAgent, {ends: ['supervisorAgent']})
-.addNode('supervisorAgent', supervisorAgent, {ends: [END]})
-.addEdge(START, 'clarifyAgent');
+const workflow = new StateGraph(globalState)
+.addNode('generateQuery', generateQuery, {ends: ['webSearch']})
+.addNode('webSearch', webSearch, {ends: ['reflection']})
+.addNode('reflection', reflection, {ends: [END, 'webSearch']})
+.addEdge(START, 'generateQuery')
 
 const app = workflow.compile();
 
-export { app };
 export default app;
+export {app};

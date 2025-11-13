@@ -1,76 +1,31 @@
 import { BaseMessage } from "@langchain/core/messages";
 import {Annotation, messagesStateReducer} from '@langchain/langgraph';
+import {TavilySearchResponse} from '@tavily/core';
+import { z } from 'zod';
 
-export const GlobalState = Annotation.Root({
+export const globalState = Annotation.Root({
     messages: Annotation<BaseMessage[]>({
+        reducer: messagesStateReducer,
+        default: () => []
+    }),
+    queries: Annotation<string[]>({
         default: () => [],
-        reducer: messagesStateReducer
+        reducer: (a: string[], b: string[]) => b
     }),
-    supervisorMessages: Annotation({
-        default: () => ({
-            value: []
-        }),
-        reducer: (supervisorMessages: GlobalState.SupervisorMessages, newSupervisorMessage: GlobalState.SupervisorMessages) => {
-            if (newSupervisorMessage.type === 'override') {
-                return {
-                    value: newSupervisorMessage.value
-                };
-            }
-
-            return {
-                value: [...supervisorMessages.value, ...newSupervisorMessage.value]
-            };
-        }
+    queryResults: Annotation<TavilySearchResponse[]>({
+        default: () => [],
+        reducer: (a: TavilySearchResponse[], b: TavilySearchResponse[]) => [...a, ...b]
     }),
-    researchBrief: Annotation<string>({
+    researchTopic: Annotation<string>({
         default: () => '',
-        reducer: (researchBrief: string, newResearchBrief: string) => newResearchBrief
+        reducer: (a: string, b: string) => b
     }),
-    currentResearchTask: Annotation<string>({
+    webSearchSummary: Annotation<string>({
         default: () => '',
-        reducer: (currentResearchTask: string, newCurrentResearchTask: string) => newCurrentResearchTask
+        reducer: (a: string, b: string) => b
     }),
-    researchFindings: Annotation<GlobalState.ResearchFindings>({
-        default: () => ({
-            findings: '',
-            sources: [],
-            task: ''
-        }),
-        reducer: (researchFindings: GlobalState.ResearchFindings, newResearchFindings: GlobalState.ResearchFindings) => newResearchFindings
+    researchLoopCount: Annotation<number>({
+        default: () => 0,
+        reducer: (a: number, b: number) => b
     }),
-    researchPlan: Annotation<GlobalState.ResearchPlan>({
-        default: () => ({
-            planText: '',
-            steps: [],
-            currentStepIndex: 0
-        }),
-        reducer: (researchPlan: GlobalState.ResearchPlan, newResearchPlan: GlobalState.ResearchPlan) => newResearchPlan
-    })
-})
-
-export namespace GlobalState {
-    export type SupervisorMessages = {
-        type?: string;
-        value: BaseMessage[];
-    }
-    
-    export type ResearchFindings = {
-        findings: string;
-        sources: string[];
-        task: string;
-    }
-    
-    export type ResearchPlan = {
-        planText: string;
-        steps: GlobalState.ResearchStep[];
-        currentStepIndex: number;
-    }
-    
-    export type ResearchStep = {
-        title: string;
-        objective: string;
-        actions: string[];
-        deliverables: string[];
-        successCriteria: string[];
-    }
-}
+});

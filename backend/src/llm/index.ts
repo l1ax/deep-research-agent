@@ -4,11 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const llm = new ChatDeepSeek({
-    model: 'deepseek-v3-1-terminus',
-    apiKey: process.env.API_KEY,
+    model: 'deepseek-chat',
+    apiKey: process.env.DEEPSEEK_API_KEY,
     streaming: true,
     configuration: {
-        baseURL: 'https://ark.cn-beijing.volces.com/api/v3'
+        baseURL: process.env.DEEPSEEK_BASE_URL
     },
     modelKwargs: {
         response_format: {
